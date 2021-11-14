@@ -30,6 +30,7 @@
 //        currentIdx = index
 //    }
 //}
+//
 //result += minValue
 //
 //for _ in 1..<N {
@@ -43,7 +44,8 @@
 //            currentIdx = 1
 //            result += input[1]
 //        }
-//    } else if currentIdx == 1 {
+//    }
+//    if currentIdx == 1 {
 //        if input[0] > input[2] {
 //            currentIdx = 2
 //            result += input[2]
@@ -51,7 +53,8 @@
 //            currentIdx = 0
 //            result += input[0]
 //        }
-//    } else {
+//    }
+//    if currentIdx == 2 {
 //        if input[0] > input[1] {
 //            currentIdx = 1
 //            result += input[1]
@@ -69,7 +72,7 @@
 //// 위와 같이 호출하는 순간 최적 상황을 찾아가려고 한다면 제대로된 해석이 불가능하다.
 ////
 //
-//print(result)
+
 //
 //  MARK: 5. 돌아 보기
 //
@@ -77,15 +80,22 @@
 
 import Foundation
 
-let input = Int(readLine()!)!
+let N = Int(readLine()!)!
 
-var n = 0
+var costs = [(Int, Int, Int)](repeating: (0,0,0), count: N+1)
+var dp = [(Int, Int, Int)](repeating: (0,0,0), count: N+1)
 
-while true {
-    let value = 3 * n * n + 3 * n + 1
-    if value >= input {
-        break
-    }
-    n += 1
+for i in 1...N {
+    let values = readLine()!.split(separator: " ").map { Int(String($0))! }
+    let RGB = (values[0], values[1], values[2])
+    costs[i] = RGB
 }
-print(n+1)
+dp[1] = costs[1]
+
+for i in 2...N {
+    dp[i].0 = min(dp[i-1].1, dp[i-1].2) + costs[i].0
+    dp[i].1 = min(dp[i-1].0, dp[i-1].2) + costs[i].1
+    dp[i].2 = min(dp[i-1].0, dp[i-1].1) + costs[i].2
+}
+
+print(min(dp[N].0, dp[N].1, dp[N].2))
