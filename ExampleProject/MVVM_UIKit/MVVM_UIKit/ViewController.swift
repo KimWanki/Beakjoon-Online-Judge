@@ -12,8 +12,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        username.bind(to: user.name)
     }
     
-
+    @IBOutlet var username: BoundTextField!
+    
+    var user = User(name: Observable("Pual Hudson"))
+    
 }
 
